@@ -96,13 +96,23 @@ function shell() {
     </aside>
     <section class="workarea"><header class="topbar"><button class="icon-button mobile-menu" id="menu" aria-label="Toggle navigation">☰</button><span class="breadcrumb">SAGE <span> / </span> <strong>${pageName()}</strong></span><span class="topbar-spacer"></span><label class="header-search">⌕<input aria-label="Search" placeholder="Search SAGE" /></label><div class="header-actions"><button class="theme-toggle" data-action="theme" aria-label="Switch to ${state.theme === 'light' ? 'dark' : 'light'} theme">${state.theme === 'light' ? '☾' : '☀'} <span>${state.theme === 'light' ? 'Dark' : 'Light'}</span></button><button class="icon-button" data-action="notifications" aria-label="Notifications">♢</button><button class="icon-button" data-action="logout" aria-label="Sign out">↗</button></div></header><main id="page-content"></main></section>
   </div>`;
-  app.querySelectorAll('[data-page]').forEach(btn => btn.addEventListener('click', () => { state.page = btn.dataset.page; renderPage(); }));
+  app.querySelectorAll('[data-page]').forEach(btn => btn.addEventListener('click', () => {
+    state.page = btn.dataset.page;
+    updateSidebarActive();
+    renderPage();
+  }));
   app.querySelector('#menu')?.addEventListener('click', () => app.querySelector('#sidebar').classList.toggle('open'));
   app.querySelectorAll('[data-action]').forEach(btn => btn.addEventListener('click', actionHandler));
   renderPage();
 }
 
-function pageName() { return roleInfo[state.role].nav.find(item => item[0] === state.page)?.[2] || 'Dashboard'; }
+function updateSidebarActive() {
+  app.querySelectorAll('.nav-link[data-page]').forEach(btn => {
+    const isActive = btn.dataset.page === state.page;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-current', isActive ? 'page' : 'false');
+  });
+}
 function header(title, text, notice = true) { return `<div class="page-heading"><div><h1>${title}</h1><p>${text}</p></div>${notice ? '<div class="notice">◉ <span><b>Demo environment</b> · Synthetic data only</span></div>' : ''}</div>`; }
 function stat(label, value, meta, tint = '#ddf5ee', cls = '') { return `<article class="stat-card" style="--tint:${tint}"><div class="label">${label}</div><div class="value">${value}</div><div class="meta ${cls}">${meta}</div></article>`; }
 function statusPill(value) { const map = { 'High': 'rose', 'Medium': 'amber', 'Low': 'green', 'Improving': 'green', 'Action planned': 'blue', 'Under review': 'amber', 'Resolved': 'green' }; return `<span class="pill ${map[value] || 'slate'}">${value}</span>`; }

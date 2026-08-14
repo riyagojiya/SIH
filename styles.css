@@ -968,9 +968,15 @@ p {
 
 .attendance-grid {
   display: grid;
-  grid-template-columns: repeat(var(--days), 16px);
+  grid-template-columns: repeat(31, minmax(16px, 1fr));
   grid-template-rows: 16px;
-  justify-content: space-between;
+  column-gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.attendance-grid .attendance-cell {
+  justify-self: center;
 }
 
 .attendance-cell {

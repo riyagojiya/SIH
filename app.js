@@ -84,7 +84,9 @@ function showWelcome() {
   app.querySelector('#try-demo').addEventListener('click', () => { toast('Demo credentials added. You can now enter the prototype.'); });
   app.querySelectorAll('[data-action]').forEach(btn => btn.addEventListener('click', actionHandler));
 }
-
+function pageName() {
+  return roleInfo[state.role].nav.find(item => item[0] === state.page)?.[2] || 'Dashboard';
+}
 function shell() {
   const info = roleInfo[state.role];
   const nav = info.nav.map(([page, icon, label]) => `<button class="nav-link ${state.page === page ? 'active' : ''}" data-page="${page}"><span class="nav-icon">${icon}</span>${label}</button>`).join('');
